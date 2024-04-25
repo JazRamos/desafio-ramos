@@ -1,6 +1,6 @@
 class ProductManager{ 
-    constructor(){
-    this.products = [];
+    constructor(path){
+    this.path = path;
 }
 
     addProducts(title = 'producto prueba', description = 'esto es un producto prueba', price = 200, thumbnail, code ='abc1', stock =25 ){
@@ -8,7 +8,6 @@ class ProductManager{
             id: this.getProductById() + 1,
             title,
             description,
-            capacity,
             price,
             thumbnail,
             code,
