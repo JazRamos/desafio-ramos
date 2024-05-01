@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = './products.json';
 class ProductManager {
     constructor(path) {
         this.path = path;
@@ -69,7 +68,7 @@ class ProductManager {
 }
 
 
-const prodManager = new ProductManager(path)
+const prodManager = new ProductManager("./products.json")
 const prod1 = {
     id: 1,
     title: "Lapicera Bic Round Stic Azul x12u",
@@ -91,10 +90,10 @@ const prod2 = {
 };
 
 const test = async () => {
-    await fs.promises.writeFile(path, "[]");
+   
     console.log(await prodManager.getProducts());
-    prodManager.addProducts(1);
-    prodManager.addProducts(2);
+    prodManager.addProducts(prod1);
+    prodManager.addProducts(prod2);
     console.log(await prodManager.getProducts());
     console.log(await prodManager.getProductById(1));
     console.log(await prodManager.getProductById(6));
