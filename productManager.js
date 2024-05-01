@@ -3,25 +3,6 @@ class ProductManager {
     constructor(path) {
         this.path = path;
     }
-    async addProducts(title, description, price, thumbnail, code, stock) {
-        const prod = {
-            id: this.getId() + 1,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        };
-        this.path.push(prod);
-    }
-    getId() {
-        let prodId = 0;
-        this.products.map((prod) => {
-            if (prod.id > prodId) prodId = prod.id;
-        });
-        return prodId;
-    }
     async getProducts() {
         try {
             if (fs.existsSync(this.path)) {
@@ -34,6 +15,26 @@ class ProductManager {
             console.log(error);
         }
     }
+    async addProducts(title, description, price, thumbnail, code, stock) {
+        const prod = {
+            id: this.getId() + 1,
+            title,
+            description,
+            price,
+            thumbnail,
+            code,
+            stock
+        };
+        this.products.push(prod);
+    }
+    getId() {
+        let prodId = 0;
+        this.products.map((prod) => {
+            if (prod.id > prodId) prodId = prod.id;
+        });
+        return prodId;
+    }
+
 
     async getProductById(productId) {
         const products = await this.getProducts();
@@ -57,9 +58,9 @@ class ProductManager {
         }
     }
 
-    async deleteProduct(productId) {
+    async deleteProduct() {
         const products = await this.getProducts();
-        const product = products.splice(product => product.id !== productId);
+        const product = products.splice(this.path);
         await fs.promises.writeFile(path, JSON.stringify(product));
         console.log("El producto fue eliminado");
 
@@ -90,15 +91,14 @@ const prod2 = {
 };
 
 const test = async () => {
-   
+
     console.log(await prodManager.getProducts());
     prodManager.addProducts(prod1);
     prodManager.addProducts(prod2);
     console.log(await prodManager.getProducts());
     console.log(await prodManager.getProductById(1));
     console.log(await prodManager.getProductById(6));
-    await prodManager.updateProduct(1, "stock", 2);
-    await prodManager.updateProduct(2, "price", 50000);
+    await prodManager.updateProduct(2, "stock", 2);
     //await prodManager.deleteProduct(1);
 }
 
