@@ -1,13 +1,12 @@
 const fs = require("fs");
-
+const path = './products.json';
 class ProductManager {
     constructor(path) {
         this.path = path;
     }
-
-    addProducts(title, description, price, thumbnail, code, stock) {
+    async addProducts(title, description, price, thumbnail, code, stock) {
         const prod = {
-            id: this.getProductById() + 1,
+            id: this.getId() + 1,
             title,
             description,
             price,
@@ -15,7 +14,7 @@ class ProductManager {
             code,
             stock
         };
-        this.products.push(prod);
+        this.path.push(prod);
     }
     getId() {
         let prodId = 0;
@@ -23,36 +22,85 @@ class ProductManager {
             if (prod.id > prodId) prodId = prod.id;
         });
         return prodId;
-
     }
-    getProductById(productId) {
-        return this.products.find(product => product.id === productId);
-    }
-
     async getProducts() {
         try {
             if (fs.existsSync(this.path)) {
                 const products = await fs.promises.readFile(this.path, "utf-8");
                 return JSON.parse(products);
             } else {
-                return [];
+                return this.path;
             }
         } catch (error) {
             console.log(error);
         }
     }
 
-
-    updateProduct() {
-
+    async getProductById(productId) {
+        const products = await this.getProducts();
+        const product = products.find(product => product.id === productId);
+        if (product) {
+            return product;
+        } else {
+            console.log('no existe este prod')
+        }
     }
 
-    deleteProduct() {
+    async updateProduct(product) {
+        try {
+            const products = await this.getProducts();
+            products.push(product);
+            await fs.promises.writeFile(this.path, JSON.stringify(products));
+            console.log('Nuevo producto agregado')
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    async deleteProduct(productId) {
+        const products = await this.getProducts();
+        const product = products.splice(product => product.id !== productId);
+        await fs.promises.writeFile(path, JSON.stringify(product));
+        console.log("El producto fue eliminado");
+
 
     }
 }
 
 
+const prodManager = new ProductManager(path)
+const prod1 = {
+    id: 1,
+    title: "Lapicera Bic Round Stic Azul x12u",
+    description: "Caja por 12 unidades de lapiceras Bic línea Round Stic, color azul, trazo grueso.",
+    price: 3945,
+    thumbnail: "https: //res.cloudinary.com/diklj3m6q/image/upload/v1705344747/lapicera1_l3pehr.png",
+    code: "1",
+    stock: 10
+};
 
+const prod2 = {
+    id: 2,
+    title: "Lapiceras Bic Colores Cristal x10u",
+    description: "Lapiceras Bic línea Cristal por 10 dolores surtidos, trazo grueso.",
+    price: 7600,
+    thumbnail: "https: //res.cloudinary.com/diklj3m6q/image/upload/v1705344747/lapicera2_k7isxg.png",
+    code: "2",
+    stock: 10
+};
 
-const prodManager = new ProductManager("./products.json")
+const test = async () => {
+    await fs.promises.writeFile(path, "[]");
+    console.log(await prodManager.getProducts());
+    prodManager.addProducts(1);
+    prodManager.addProducts(2);
+    console.log(await prodManager.getProducts());
+    console.log(await prodManager.getProductById(1));
+    console.log(await prodManager.getProductById(6));
+    await prodManager.updateProduct(1, "stock", 2);
+    await prodManager.updateProduct(2, "price", 50000);
+    //await prodManager.deleteProduct(1);
+}
+
+test();
