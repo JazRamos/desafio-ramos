@@ -1,9 +1,11 @@
-class ProductManager{ 
-    constructor(path){
-    this.path = path;
-}
+const fs = require("fs");
 
-    addProducts(title = 'producto prueba', description = 'esto es un producto prueba', price = 200, thumbnail, code ='abc1', stock =25 ){
+class ProductManager {
+    constructor(path) {
+        this.path = path;
+    }
+
+    addProducts(title, description, price, thumbnail, code, stock) {
         const prod = {
             id: this.getProductById() + 1,
             title,
@@ -24,13 +26,33 @@ class ProductManager{
 
     }
     getProductById(productId) {
-        
         return this.products.find(product => product.id === productId);
     }
 
-    getProducts() {
-        return this.products;
+    async getProducts() {
+        try {
+            if (fs.existsSync(this.path)) {
+                const products = await fs.promises.readFile(this.path, "utf-8");
+                return JSON.parse(products);
+            } else {
+                return [];
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    updateProduct() {
+
+    }
+
+    deleteProduct() {
+
     }
 }
 
-const prodManager = new ProductManager ("./products.json")
+
+
+
+const prodManager = new ProductManager("./products.json")
