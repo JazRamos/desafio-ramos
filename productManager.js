@@ -15,15 +15,22 @@ class ProductManager{
         };
         this.products.push(prod);
     }
-    getProductById() {
+    getId() {
         let prodId = 0;
         this.products.map((prod) => {
             if (prod.id > prodId) prodId = prod.id;
         });
         return prodId;
+
+    }
+    getProductById(productId) {
+        
+        return this.products.find(product => product.id === productId);
     }
 
     getProducts() {
         return this.products;
     }
 }
+
+const prodManager = new ProductManager ("./products.json")
