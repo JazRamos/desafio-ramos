@@ -29,7 +29,7 @@ class ProductManager {
     }
     getId() {
         let prodId = 0;
-        this.products.map((prod) => {
+        products.map((prod) => {
             if (prod.id > prodId) prodId = prod.id;
         });
         return prodId;
