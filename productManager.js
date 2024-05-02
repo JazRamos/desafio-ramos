@@ -39,20 +39,21 @@ class ProductManager {
     }
 
 
-    async getProductById(productId) {
+    async getProductById(product) {
         try {
             const products = await this.getProducts();
-            const product = products.find(product => product.id === productId);
+             products.find(product => product.id === id);
             return product;
         } catch (error) {
             console.log("No existe este producto");
         }
     }
 
-    async updateProduct(productId) {
+    async updateProduct(id, campo, newValue) {
         try {
             const products = await this.getProducts();
-            products.push(product);
+            products.push(product => product.id === id);
+            product[campo] = newValue;
             await fs.promises.writeFile(this.path, JSON.stringify(products));
             console.log('Nuevo producto agregado')
         }
@@ -126,6 +127,8 @@ const test = async () => {
     console.log(await prodManager.getProductById(1));
     console.log(await prodManager.getProductById(6));
     await prodManager.updateProduct(2, "stock", 2);
+    console.log(await prodManager.getProducts());
+    
     //await prodManager.deleteProduct(1);
 }
 
