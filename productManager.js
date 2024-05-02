@@ -7,15 +7,17 @@ class ProductManager {
         try {
             if (fs.existsSync(this.path)) {
                 const products = await fs.promises.readFile(this.path, "utf-8");
-                return JSON.parse(products);
+                const getJSON= JSON.parse(products);
+                return getJSON;
             } else {
-                return this.path;
+                return [];
             }
         } catch (error) {
             console.log(error);
         }
     }
     async addProducts(title, description, price, thumbnail, code, stock) {
+        const products = await this.getProducts();
         const prod = {
             id: this.getId() + 1,
             title,
@@ -25,9 +27,10 @@ class ProductManager {
             code,
             stock
         };
-        this.products.push(prod);
+        products.push(prod);
     }
-    getId() {
+    async getId() {
+        const products = await this.getProducts();
         let prodId = 0;
         products.map((prod) => {
             if (prod.id > prodId) prodId = prod.id;
@@ -37,12 +40,12 @@ class ProductManager {
 
 
     async getProductById(productId) {
+        try{
         const products = await this.getProducts();
         const product = products.find(product => product.id === productId);
-        if (product) {
             return product;
-        } else {
-            console.log('no existe este prod')
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -59,11 +62,15 @@ class ProductManager {
     }
 
     async deleteProduct() {
-        const products = await this.getProducts();
-        const product = products.splice(this.path);
-        await fs.promises.writeFile(path, JSON.stringify(product));
-        console.log("El producto fue eliminado");
-
+        try {
+            const products = await this.getProducts();
+            const product = products.splice(this.path);
+            await fs.promises.writeFile(path, JSON.stringify(product));
+            console.log("El producto fue eliminado");
+        } catch (error) {
+            console.log(error);
+        }
+       
 
     }
 }
