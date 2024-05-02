@@ -7,7 +7,7 @@ class ProductManager {
         try {
             if (fs.existsSync(this.path)) {
                 const products = await fs.promises.readFile(this.path, "utf-8");
-                const getJSON= JSON.parse(products);
+                const getJSON = JSON.parse(products);
                 return getJSON;
             } else {
                 return [];
@@ -40,12 +40,12 @@ class ProductManager {
 
 
     async getProductById(productId) {
-        try{
-        const products = await this.getProducts();
-        const product = products.find(product => product.id === productId);
+        try {
+            const products = await this.getProducts();
+            const product = products.find(product => product.id === productId);
             return product;
         } catch (error) {
-            console.log(error);
+            console.log("No existe este producto");
         }
     }
 
@@ -70,7 +70,7 @@ class ProductManager {
         } catch (error) {
             console.log(error);
         }
-       
+
 
     }
 }
@@ -96,12 +96,32 @@ const prod2 = {
     code: "2",
     stock: 10
 };
+const prod3 = {
+    id: 3,
+    title: "Cuaderno Exito E7 Rayado",
+    description: "Cuaderno Exito E7 espiralado tamaño A4. 60 hojas rayadas.",
+    price: 5650,
+    thumbnail: "https: //res.cloudinary.com/diklj3m6q/image/upload/v1705344747/cuaderno2_nbj6ye.png",
+    code: "3",
+    stock: 10
+};
+const prod4 = {
+    id: 4,
+    title: "Cuaderno Rivadavia ABC Rayado",
+    description: "Cuaderno Rivadavia ABC espiralado tamaño A4. 100 hojas rayadas.",
+    price: 7950,
+    thumbnail: "https: //res.cloudinary.com/diklj3m6q/image/upload/v1705344747/cuaderno1_vd59wz.png",
+    code: "4",
+    stock: 10
+};
 
 const test = async () => {
 
     console.log(await prodManager.getProducts());
     prodManager.addProducts(prod1);
     prodManager.addProducts(prod2);
+    prodManager.addProducts(prod3);
+    prodManager.addProducts(prod4);
     console.log(await prodManager.getProducts());
     console.log(await prodManager.getProductById(1));
     console.log(await prodManager.getProductById(6));
