@@ -16,24 +16,15 @@ class ProductManager {
             console.log(error);
         }
     }
-    async addProducts(title, description, price, thumbnail, code, stock) {
+    async addProducts(product) {
         const products = await this.getProducts();
-        const prod = {
-            id: this.getId() + 1,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        };
-        products.push(prod);
+        products.push(product);
     }
     async getId() {
         const products = await this.getProducts();
         let prodId = 0;
-        products.map((prod) => {
-            if (prod.id > prodId) prodId = prod.id;
+        products.map((product) => {
+            if (product.id > prodId) prodId = product.id;
         });
         return prodId;
     }
@@ -123,7 +114,6 @@ const test = async () => {
     prodManager.addProducts(prod2);
     prodManager.addProducts(prod3);
     prodManager.addProducts(prod4);
-    console.log(await prodManager.getProducts());
     console.log(await prodManager.getProductById(1));
     console.log(await prodManager.getProductById(6));
     await prodManager.updateProduct(2, "stock", 2);
