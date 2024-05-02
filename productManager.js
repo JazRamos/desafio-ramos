@@ -49,7 +49,7 @@ class ProductManager {
         }
     }
 
-    async updateProduct(product) {
+    async updateProduct(productId) {
         try {
             const products = await this.getProducts();
             products.push(product);
