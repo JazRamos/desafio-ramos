@@ -33,7 +33,7 @@ class ProductManager {
     async getProductById(product) {
         try {
             const products = await this.getProducts();
-             products.find(product => product.id === id);
+            products.find(product => product.id === id);
             return product;
         } catch (error) {
             console.log("No existe este producto");
@@ -118,7 +118,7 @@ const test = async () => {
     console.log(await prodManager.getProductById(6));
     await prodManager.updateProduct(2, "stock", 2);
     console.log(await prodManager.getProducts());
-    
+
     //await prodManager.deleteProduct(1);
 }
 
